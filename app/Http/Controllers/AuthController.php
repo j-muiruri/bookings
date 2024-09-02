@@ -21,6 +21,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
+            $rules = [
+                'email' => 'required|email',
+                'password' => 'required',
+            ];
+
+            $this->validateRequestData($request->all(), $rules);
             $user = User::where('email', $request->email)->first();
             $userAuth = $user ? Hash::check($request->password, $user->password) : false;
 
@@ -54,7 +60,7 @@ class AuthController extends Controller
 
             $response = [
                 'success' => false,
-                'message' => 'An error occured while trying to login, please try again',
+                'error' => $th->getMessage(),
             ];
 
             return response()->json($response, 500);
@@ -111,7 +117,7 @@ class AuthController extends Controller
             ['email', $data->email],
             ['created_at', '>', now()->subHours(24)],
         ]);
-        if (!$token->exists()) {
+        if (! $token->exists()) {
 
             $response = [
                 'success' => false,
@@ -156,7 +162,6 @@ class AuthController extends Controller
              * @var User $user
              */
             $user = User::create($data);
-
 
             if ($user) {
                 $data = [

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Tour;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TourPolicy
 {
@@ -29,7 +28,7 @@ class TourPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->role == 'admin';
     }
 
     /**
@@ -37,7 +36,7 @@ class TourPolicy
      */
     public function update(User $user, Tour $tour): bool
     {
-        //
+        return $user->role == 'admin';
     }
 
     /**
@@ -45,7 +44,7 @@ class TourPolicy
      */
     public function delete(User $user, Tour $tour): bool
     {
-        //
+        return $user->role == 'admin';
     }
 
     /**

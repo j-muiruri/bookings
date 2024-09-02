@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->restrictOnDelete();
             $table->foreignId('tour_id')->constrained('tours', 'id')->restrictOnDelete();
-            $table->enum('status', ['approved', 'pending', 'canceled']);
+            $table->enum('status', ['approved', 'pending', 'canceled'])->default('pending');
             $table->timestamps();
         });
     }

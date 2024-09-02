@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
+    protected $rules = [
+        'name' => 'string|required',
+        'description' => 'string|required',
+        'price' => 'numeric|required',
+        'slots' => 'integer|required',
+        'destination_id' => 'required|exists:destinations,id',
+    ];
+
     /**
      * Display a listing of the resource.
      */
@@ -20,10 +28,8 @@ class TourController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [];
 
-
-        Tour::create($this->validateRequestData($request->all(), $rules));
+        Tour::create($this->validateRequestData($request->all(), $this->rules));
 
         return response()->json(['message' => 'Tour created successfully'], 201);
     }
@@ -41,10 +47,8 @@ class TourController extends Controller
      */
     public function update(Request $request, Tour $tour)
     {
-        $rules = [];
 
-
-        $tour->update($this->validateRequestData($request->all(), $rules));
+        $tour->update($this->validateRequestData($request->all(), $this->rules));
 
         return response()->json(['message' => 'Tour updated successfully'], 200);
     }

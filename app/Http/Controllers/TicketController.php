@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -12,7 +14,17 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return response()->json(['data' => Ticket::paginate(10)]);
+
+        if (Auth::user()->role == 'user') {
+            $data = Ticket::paginate(10);
+        } else {
+            $data = Ticket::whereHas('booking', function (Builder $query) {
+                $query->where('user_id', Auth::user()->id);
+            })->paginate(10);
+        }
+
+        return response()->json(['data' => $data,
+        ]);
     }
 
     /**
@@ -20,12 +32,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [];
-
-
-        Ticket::create($this->validateRequestData($request->all(), $rules));
-
-        return response()->json(['message' => 'Ticket created successfully'], 201);
+        //
     }
 
     /**
@@ -41,12 +48,7 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        $rules = [];
-
-
-        $ticket->update($this->validateRequestData($request->all(), $rules));
-
-        return response()->json(['message' => 'Ticket updated successfully'], 200);
+        //
     }
 
     /**
@@ -54,8 +56,6 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        $ticket->delete();
-
-        return response()->json(['message' => 'Ticket deleted successfully'], 200);
+        //
     }
 }

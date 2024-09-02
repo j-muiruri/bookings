@@ -20,7 +20,11 @@ class DestinationController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [];
+        $rules = [
+            'name' => 'string|required',
+            'slug' => 'string|required|unique:destinations',
+            'description' => 'string|required'
+        ];
 
 
         Destination::create($this->validateRequestData($request->all(), $rules));
@@ -41,7 +45,11 @@ class DestinationController extends Controller
      */
     public function update(Request $request, Destination $destination)
     {
-        $rules = [];
+        $rules = [
+            'name' => 'string|required',
+            'slug' => 'string|required|unique:destinations',
+            'description' => 'string|required'
+        ];
 
 
         $destination->update($this->validateRequestData($request->all(), $rules));

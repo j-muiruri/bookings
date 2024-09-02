@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
             $table->foreignId('destination_id')->constrained('destinations','id')->restrictOnDelete();
-            $table->string('name ');
+            $table->string('name');
             $table->text('description');
             $table->float('price');
             $table->integer('slots');
